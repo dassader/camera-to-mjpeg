@@ -1,7 +1,6 @@
 package com.home.cameratomjpeg.controller;
 
 import com.home.cameratomjpeg.service.CameraStreamService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -18,11 +17,15 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 @Controller
-@AllArgsConstructor
 public class MjpegController {
 
     private CameraStreamService cameraStreamService;
     private AtomicInteger atomicInteger;
+
+    public MjpegController(CameraStreamService cameraStreamService) {
+        this.cameraStreamService = cameraStreamService;
+        this.atomicInteger = new AtomicInteger();
+    }
 
     @GetMapping(value = "/camera/{cameraId}")
     @ResponseBody
