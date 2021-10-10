@@ -23,10 +23,14 @@
   },
   "options": {
     "baseUrl": "http://HASS_IP:8123",
-    "token": "HASS_ACCESS_TOKEN"
+    "token": "HASS_ACCESS_TOKEN",
+    "cameraHasConnectionWebhook": "",
+    "cameraHasNoConnectionWebhook": ""
   },
   "schema": {
     "baseUrl": "str",
-    "token": "str"
+    "token": "str",
+    "cameraHasConnectionWebhook": "str",
+    "cameraHasNoConnectionWebhook": "str"
   }
 }

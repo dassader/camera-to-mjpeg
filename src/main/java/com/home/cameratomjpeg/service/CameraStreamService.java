@@ -1,11 +1,9 @@
 package com.home.cameratomjpeg.service;
 
-import com.home.cameratomjpeg.config.ApplicationConfigEntity;
+import com.home.cameratomjpeg.client.HassClient;
 import lombok.AllArgsConstructor;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,32 +14,19 @@ import java.util.function.BiConsumer;
 @AllArgsConstructor
 public class CameraStreamService {
 
-    private HttpClient httpClient;
-    private ApplicationConfigEntity applicationConfigEntity;
+    private HassClient hassClient;
 
     public void writeCameraSnapshot(String cameraId, BiConsumer<InputStream, Long> partsConsumer) {
         while (true) {
-            HttpEntity response = readCameraSnapshot(cameraId);
-            long contentLength = response.getContentLength();
-            try {
-                InputStream content = response.getContent();
+            try (CloseableHttpResponse response = hassClient.getCameraSnapshot(cameraId)) {
+                HttpEntity entity = response.getEntity();
+                long contentLength = entity.getContentLength();
+                InputStream content = entity.getContent();
+
                 partsConsumer.accept(content, contentLength);
             } catch (IOException e) {
-                throw new IllegalStateException(e);
+                throw new IllegalStateException("Error while write camera snapshot", e);
             }
-        }
-    }
-
-    private HttpEntity readCameraSnapshot(String cameraId) {
-        String url = applicationConfigEntity.getBaseUrl() + "/api/camera_proxy/" + cameraId;
-        HttpGet httpGet = new HttpGet(url);
-        httpGet.setHeader("Authorization", "Bearer "+ applicationConfigEntity.getToken());
-
-        try {
-            HttpResponse response = httpClient.execute(httpGet);
-            return response.getEntity();
-        } catch (IOException e) {
-            throw new IllegalStateException("Error while read");
         }
     }
 }

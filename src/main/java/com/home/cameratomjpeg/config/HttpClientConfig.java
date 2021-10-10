@@ -1,11 +1,13 @@
 package com.home.cameratomjpeg.config;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -18,9 +20,18 @@ import javax.net.ssl.SSLContext;
 @Configuration
 public class HttpClientConfig {
     @Bean
-    public HttpClient httClient(PoolingHttpClientConnectionManager connectionManager) {
+    public CloseableHttpClient httClient(PoolingHttpClientConnectionManager connectionManager) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         builder.setConnectionManager(connectionManager);
+
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(1000)
+                .setSocketTimeout(1000)
+                .setConnectionRequestTimeout(1000)
+                .build();
+
+        builder.setDefaultRequestConfig(requestConfig);
+
         return builder.build();
     }
 

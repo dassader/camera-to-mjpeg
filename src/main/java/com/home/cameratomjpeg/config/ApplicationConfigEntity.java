@@ -6,4 +6,6 @@ import lombok.Data;
 public class ApplicationConfigEntity {
     private String baseUrl;
     private String token;
+    private String cameraHasConnectionWebhook;
+    private String cameraHasNoConnectionWebhook;
 }

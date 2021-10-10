@@ -1,6 +1,9 @@
 package com.home.cameratomjpeg.controller;
 
+import com.home.cameratomjpeg.exception.JustSkipMeException;
 import com.home.cameratomjpeg.service.CameraStreamService;
+import com.home.cameratomjpeg.service.UserCountService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -12,47 +15,46 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 @Slf4j
 @Controller
+@AllArgsConstructor
 public class MjpegController {
 
     private CameraStreamService cameraStreamService;
-    private AtomicInteger atomicInteger;
-
-    public MjpegController(CameraStreamService cameraStreamService) {
-        this.cameraStreamService = cameraStreamService;
-        this.atomicInteger = new AtomicInteger();
-    }
+    private UserCountService userCountService;
 
     @GetMapping(value = "/camera/{cameraId}")
     @ResponseBody
     public void getCameraStream(@PathVariable String cameraId, HttpServletResponse response) {
         response.setContentType("multipart/x-mixed-replace; boundary=--BoundaryString");
 
-        log.info("User connected. User count: {}", atomicInteger.incrementAndGet());
-
         try {
+            log.info("User connected. User count: {}", userCountService.fireUserConnect());
+
             ServletOutputStream outputStream = response.getOutputStream();
 
             BiConsumer<InputStream, Long> partsConsumer =
                     (inputStream, length) -> writeBoundary(outputStream, inputStream, length);
 
             cameraStreamService.writeCameraSnapshot(cameraId, partsConsumer);
-        } catch (Exception e) {
+        } catch (JustSkipMeException e) {
             log.warn(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error while handle camera request", e);
         } finally {
-            log.info("User disconnected. User count: {}", atomicInteger.decrementAndGet());
+            log.info("User disconnected. User count: {}", userCountService.fireUserDisconnect());
         }
     }
 
     private void writeBoundary(ServletOutputStream outputStream, InputStream inputStream, long length) {
         try {
+            System.out.println("Write");
+
             outputStream.println("--BoundaryString");
             outputStream.println("Content-type: image/jpeg");
-            outputStream.println("Content-Length: "+length);
+            outputStream.println("Content-Length: " + length);
             outputStream.println();
 
             IOUtils.copy(inputStream, outputStream);
@@ -61,7 +63,7 @@ public class MjpegController {
 
             outputStream.flush();
         } catch (IOException e) {
-            throw new IllegalStateException("Error while write parts.", e);
+            throw new JustSkipMeException("Error while write parts");
         }
     }
 }
