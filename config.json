@@ -1,6 +1,6 @@
 {
   "name": "Camera to mJPEG",
-  "version": "1",
+  "version": "2",
   "slug": "camera_to_mjpeg",
   "description": "Proxy allow to convert Hass camera to the mJPEG stream",
   "arch": [
@@ -16,10 +16,10 @@
     "config:rw"
   ],
   "ports": {
-    "8181/tcp": 8080
+    "8080/tcp": 8181
   },
   "ports_description": {
-    "8181/tcp": "Rest api"
+    "8080/tcp": "Rest api"
   },
   "options": {
     "baseUrl": "http://HASS_IP:8123",
