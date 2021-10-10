@@ -1,6 +1,6 @@
 {
   "name": "Camera to mJPEG",
-  "version": "3",
+  "version": "1",
   "slug": "camera_to_mjpeg",
   "description": "Proxy allow to convert Hass camera to the mJPEG stream",
   "arch": [
