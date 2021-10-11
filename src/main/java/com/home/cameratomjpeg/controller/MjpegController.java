@@ -50,8 +50,6 @@ public class MjpegController {
 
     private void writeBoundary(ServletOutputStream outputStream, InputStream inputStream, long length) {
         try {
-            System.out.println("Write");
-
             outputStream.println("--BoundaryString");
             outputStream.println("Content-type: image/jpeg");
             outputStream.println("Content-Length: " + length);
