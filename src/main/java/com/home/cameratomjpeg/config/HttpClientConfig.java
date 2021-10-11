@@ -20,14 +20,15 @@ import javax.net.ssl.SSLContext;
 @Configuration
 public class HttpClientConfig {
     @Bean
-    public CloseableHttpClient httClient(PoolingHttpClientConnectionManager connectionManager) {
+    public CloseableHttpClient httClient(PoolingHttpClientConnectionManager connectionManager,
+                                         ApplicationConfigEntity applicationConfig) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         builder.setConnectionManager(connectionManager);
 
         RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(1000)
-                .setSocketTimeout(1000)
-                .setConnectionRequestTimeout(1000)
+                .setConnectTimeout(applicationConfig.getSocketTimeout())
+                .setSocketTimeout(applicationConfig.getSocketTimeout())
+                .setConnectionRequestTimeout(applicationConfig.getSocketTimeout())
                 .build();
 
         builder.setDefaultRequestConfig(requestConfig);

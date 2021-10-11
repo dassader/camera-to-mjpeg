@@ -8,4 +8,5 @@ public class ApplicationConfigEntity {
     private String token;
     private String cameraHasConnectionWebhook;
     private String cameraHasNoConnectionWebhook;
+    private Integer socketTimeout;
 }

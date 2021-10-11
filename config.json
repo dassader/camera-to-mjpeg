@@ -25,12 +25,14 @@
     "baseUrl": "http://HASS_IP:8123",
     "token": "HASS_ACCESS_TOKEN",
     "cameraHasConnectionWebhook": "",
-    "cameraHasNoConnectionWebhook": ""
+    "cameraHasNoConnectionWebhook": "",
+    "socketTimeout": "10000"
   },
   "schema": {
     "baseUrl": "str",
     "token": "str",
     "cameraHasConnectionWebhook": "str",
-    "cameraHasNoConnectionWebhook": "str"
+    "cameraHasNoConnectionWebhook": "str",
+    "socketTimeout": "int"
   }
 }
