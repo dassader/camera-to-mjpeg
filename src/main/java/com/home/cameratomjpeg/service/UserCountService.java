@@ -30,7 +30,7 @@ public class UserCountService {
     public int fireUserDisconnect() {
         int userCount = atomicInteger.decrementAndGet();
 
-        if(userCount <= 0) {
+        if (userCount <= 0) {
             triggerWebhookIfExist(applicationConfig.getCameraHasNoConnectionWebhook(), userCount);
         }
 
@@ -38,7 +38,7 @@ public class UserCountService {
     }
 
     private void triggerWebhookIfExist(String webhookId, int userCount) {
-        if(webhookId == null || webhookId.isEmpty()) {
+        if (webhookId == null || webhookId.isEmpty()) {
             return;
         }
 

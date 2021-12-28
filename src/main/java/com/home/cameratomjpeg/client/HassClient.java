@@ -33,7 +33,7 @@ public class HassClient {
         }
 
         HttpGet request = new HttpGet(uri);
-        request.setHeader("Authorization", "Bearer "+ applicationConfig.getToken());
+        request.setHeader("Authorization", "Bearer " + applicationConfig.getToken());
 
         try {
             return httpClient.execute(request);
@@ -56,10 +56,10 @@ public class HassClient {
         }
 
         HttpPost request = new HttpPost(uri);
-        request.setHeader("Authorization", "Bearer "+ applicationConfig.getToken());
+        request.setHeader("Authorization", "Bearer " + applicationConfig.getToken());
 
 
-        try(CloseableHttpResponse response = httpClient.execute(request)) {
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
 
         } catch (IOException e) {
             throw new IllegalStateException("Error trigger webhook", e);

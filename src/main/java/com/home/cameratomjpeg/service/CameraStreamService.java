@@ -1,32 +1,21 @@
 package com.home.cameratomjpeg.service;
 
-import com.home.cameratomjpeg.client.HassClient;
+import com.home.cameratomjpeg.repository.CameraSnapshotRepository;
 import lombok.AllArgsConstructor;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Service
 @AllArgsConstructor
 public class CameraStreamService {
 
-    private HassClient hassClient;
+    private CameraSnapshotRepository snapshotRepository;
 
-    public void writeCameraSnapshot(String cameraId, BiConsumer<InputStream, Long> partsConsumer) {
+    public void pushCameraSnapshot(String cameraId, Consumer<byte[]> consumer) {
         while (true) {
-            try (CloseableHttpResponse response = hassClient.getCameraSnapshot(cameraId)) {
-                HttpEntity entity = response.getEntity();
-                long contentLength = entity.getContentLength();
-                InputStream content = entity.getContent();
-
-                partsConsumer.accept(content, contentLength);
-            } catch (IOException e) {
-                throw new IllegalStateException("Error while write camera snapshot", e);
-            }
+            snapshotRepository.getLastSnapshotByCameraId(cameraId)
+                    .ifPresent(consumer);
         }
     }
 }

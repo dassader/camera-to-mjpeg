@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Slf4j
 @Controller
@@ -35,10 +34,9 @@ public class MjpegController {
 
             ServletOutputStream outputStream = response.getOutputStream();
 
-            BiConsumer<InputStream, Long> partsConsumer =
-                    (inputStream, length) -> writeBoundary(outputStream, inputStream, length);
+            Consumer<byte[]> contentConsumer = (content) -> writeBoundary(outputStream, content);
 
-            cameraStreamService.writeCameraSnapshot(cameraId, partsConsumer);
+            cameraStreamService.pushCameraSnapshot(cameraId, contentConsumer);
         } catch (JustSkipMeException e) {
             log.warn(e.getMessage());
         } catch (Exception e) {
@@ -48,14 +46,14 @@ public class MjpegController {
         }
     }
 
-    private void writeBoundary(ServletOutputStream outputStream, InputStream inputStream, long length) {
+    private void writeBoundary(ServletOutputStream outputStream, byte[] content) {
         try {
             outputStream.println("--BoundaryString");
             outputStream.println("Content-type: image/jpeg");
-            outputStream.println("Content-Length: " + length);
+            outputStream.println("Content-Length: " + content.length);
             outputStream.println();
 
-            IOUtils.copy(inputStream, outputStream);
+            IOUtils.write(content, outputStream);
             outputStream.println();
             outputStream.println();
 
