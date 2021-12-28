@@ -27,16 +27,20 @@
     "cameraHasConnectionWebhook": "",
     "cameraHasNoConnectionWebhook": "",
     "socketTimeout": "10000",
-    "cameraIdList": ["camera.bedroom"],
+    "cameraIdList": [
+      "camera.bedroom"
+    ],
     "telegramBotToken": ""
   },
   "schema": {
     "baseUrl": "str",
     "token": "str",
-    "cameraHasConnectionWebhook": "str",
-    "cameraHasNoConnectionWebhook": "str",
+    "cameraHasConnectionWebhook": "str?",
+    "cameraHasNoConnectionWebhook": "str?",
     "socketTimeout": "int",
-    "cameraIdList": "str[]",
-    "telegramBotToken": "str"
+    "cameraIdList": [
+      "str?"
+    ],
+    "telegramBotToken": "str?"
   }
 }
