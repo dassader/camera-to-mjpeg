@@ -30,7 +30,7 @@ public class MjpegController {
         response.setContentType("multipart/x-mixed-replace; boundary=--BoundaryString");
 
         try {
-            log.info("User connected. User count: {}", userCountService.fireUserConnect());
+            log.info("User connected. User count: {}", userCountService.userConnect());
 
             ServletOutputStream outputStream = response.getOutputStream();
 
@@ -42,7 +42,7 @@ public class MjpegController {
         } catch (Exception e) {
             log.error("Error while handle camera request", e);
         } finally {
-            log.info("User disconnected. User count: {}", userCountService.fireUserDisconnect());
+            log.info("User disconnected. User count: {}", userCountService.userDisconnect());
         }
     }
 

@@ -1,27 +1,33 @@
 package com.home.cameratomjpeg.service;
 
 import com.home.cameratomjpeg.client.HassClient;
-import com.home.cameratomjpeg.config.ApplicationConfigEntity;
 import com.home.cameratomjpeg.repository.CameraSnapshotRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
-@Log4j2
+@Slf4j
 @Component
-@AllArgsConstructor
 public class CameraSnapshotLoader implements Runnable {
 
     private HassClient hassClient;
     private CameraSnapshotRepository snapshotRepository;
-    private ApplicationConfigEntity applicationConfig;
+    private List<String> cameraIdList;
 
+    public CameraSnapshotLoader(HassClient hassClient,
+                                CameraSnapshotRepository snapshotRepository,
+                                @Value("${cameraIdList}") List<String> cameraIdList) {
+        this.hassClient = hassClient;
+        this.snapshotRepository = snapshotRepository;
+        this.cameraIdList = cameraIdList;
+    }
 
     @Override
     @Scheduled(fixedDelay = 1_000)
@@ -30,7 +36,7 @@ public class CameraSnapshotLoader implements Runnable {
 
         try {
             while (true) {
-                applicationConfig.getCameraIdList().forEach(this::loadSnapshotByCameraId);
+                cameraIdList.forEach(this::loadSnapshotByCameraId);
             }
         } catch (Exception e) {
             log.error("Error while load snapshot with message: {}", e.getMessage());

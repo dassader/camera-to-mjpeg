@@ -1,7 +1,8 @@
 package com.home.cameratomjpeg;
 
-import org.springframework.boot.SpringApplication;
+import com.home.cameratomjpeg.config.AddonContextInitializer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
@@ -9,7 +10,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class CameraToMjpegApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CameraToMjpegApplication.class, args);
+        new SpringApplicationBuilder(CameraToMjpegApplication.class)
+                .initializers(new AddonContextInitializer())
+                .run();
     }
 
 }

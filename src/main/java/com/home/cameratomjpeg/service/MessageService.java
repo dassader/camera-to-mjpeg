@@ -4,7 +4,7 @@ import com.home.cameratomjpeg.repository.CameraSnapshotRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InputMediaPhoto;
 import com.pengrad.telegrambot.request.SendMediaGroup;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j2
+@Slf4j
 public class MessageService {
 
     private TelegramBot telegramBot;

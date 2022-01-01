@@ -10,6 +10,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,14 +21,14 @@ import javax.net.ssl.SSLContext;
 public class HttpClientConfig {
     @Bean
     public CloseableHttpClient httClient(PoolingHttpClientConnectionManager connectionManager,
-                                         ApplicationConfigEntity applicationConfig) {
+                                         @Value("${socketTimeout}") Integer socketTimeout) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         builder.setConnectionManager(connectionManager);
 
         RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(applicationConfig.getSocketTimeout())
-                .setSocketTimeout(applicationConfig.getSocketTimeout())
-                .setConnectionRequestTimeout(applicationConfig.getSocketTimeout())
+                .setConnectTimeout(socketTimeout)
+                .setSocketTimeout(socketTimeout)
+                .setConnectionRequestTimeout(socketTimeout)
                 .build();
 
         builder.setDefaultRequestConfig(requestConfig);

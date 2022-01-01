@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +18,7 @@ import static com.pengrad.telegrambot.UpdatesListener.CONFIRMED_UPDATES_ALL;
 public class TelegramBotConfig {
 
     @Bean
-    public TelegramBot telegramBot(ApplicationConfigEntity applicationConfig) {
-        String token = applicationConfig.getTelegramBotToken();
+    public TelegramBot telegramBot(@Value("${telegramBotToken}") String token) {
         if (token == null || token.isEmpty()) {
             log.warn("Telegram bot token not provided");
             return null;
