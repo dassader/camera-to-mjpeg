@@ -1,6 +1,6 @@
 {
   "name": "Camera to mJPEG",
-  "version": "2",
+  "version": "3",
   "slug": "camera_to_mjpeg",
   "description": "Proxy allow to convert Hass camera to the mJPEG stream",
   "arch": [
@@ -24,23 +24,23 @@
   "options": {
     "baseUrl": "http://HASS_IP:8123",
     "token": "HASS_ACCESS_TOKEN",
-    "cameraHasConnectionWebhook": "",
-    "cameraHasNoConnectionWebhook": "",
     "socketTimeout": "10000",
     "cameraIdList": [
       "camera.bedroom"
     ],
+    "historyPhotoDelay": 750,
+    "historyPhotoCount": 5,
     "telegramBotToken": ""
   },
   "schema": {
     "baseUrl": "str",
     "token": "str",
-    "cameraHasConnectionWebhook": "str?",
-    "cameraHasNoConnectionWebhook": "str?",
     "socketTimeout": "int",
     "cameraIdList": [
       "str?"
     ],
+    "historyPhotoDelay": "int",
+    "historyPhotoCount": "int(1,5)",
     "telegramBotToken": "str?"
   }
 }

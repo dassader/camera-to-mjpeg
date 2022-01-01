@@ -19,7 +19,7 @@ public class CameraSnapshotHistoryLoader implements Runnable {
         this.snapshotRepository = snapshotRepository;
     }
 
-    @Scheduled(fixedDelay = 1_500, initialDelay = 1_000)
+    @Scheduled(fixedDelayString = "${historyPhotoDelay}", initialDelay = 1_000)
     public void run() {
         for (String cameraId : cameraIdList) {
             snapshotRepository.saveLastSnapshotByCameraId(cameraId);
